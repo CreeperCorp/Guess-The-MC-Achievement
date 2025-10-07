@@ -86,8 +86,13 @@ print()
 score = 0
 rounds = 0
 
-while True:
-    achievement = random.choice(advancements)
+# New: Use a list of indices for available achievements
+unplayed_indices = list(range(len(advancements)))
+random.shuffle(unplayed_indices)  # Shuffle achievements order for each run
+
+while unplayed_indices:
+    idx = unplayed_indices.pop()
+    achievement = advancements[idx]
     print("\n--- New Challenge! ---")
     print("Advancement/Achievement type:", achievement["type"])
     print("Description:", textwrap.fill(achievement["desc"], width=60))
@@ -129,5 +134,11 @@ while True:
 
     print(f"Score: {score}/{rounds}")
 
-print(f"\nFinal Score: {score}/{rounds} rounds played.")
-print("Goodbye!")
+    # If all have been guessed correctly, end with a victory message.
+    if score == len(advancements):
+        print("\nCongratulations! You guessed every advancement correctly — you beat the game! 🏆")
+        break
+
+if score < len(advancements):
+    print(f"\nFinal Score: {score}/{rounds} rounds played.")
+    print("Goodbye!")
